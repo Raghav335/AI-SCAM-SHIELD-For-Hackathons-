@@ -13,55 +13,36 @@ dotenv.config();
 
 const app = express();
 
-// ===============================
-// CORS
-// ===============================
-
 app.use(
   cors({
-    origin: true,
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
 
-// ===============================
-// BODY PARSER
-// ===============================
-
 app.use(express.json());
 
-// ===============================
-// ROUTES
-// ===============================
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/scan", scanRoutes);
-
 app.use("/api/chatbot", chatbotRoutes);
+app.use(
+  "/api/chatbot",
+  chatbotRoutes
+);
 
-app.use("/api/reports", reportRoutes);
-
-// ===============================
-// HOME / TEST ROUTE
-// ===============================
+app.use(
+  "/api/reports",
+  reportRoutes
+);
 
 app.get("/", (req, res) => {
   res.send("AI Scam Shield Backend Running 🚀");
 });
 
-// ===============================
-// DATABASE
-// ===============================
-
 connectDB();
-
-// ===============================
-// SERVER
-// ===============================
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
