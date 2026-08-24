@@ -43,7 +43,7 @@ function ReportScam() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/reports",
+        "https://ai-scam-shield-upkl.onrender.com/api/reports",
         {
           method: "POST",
           headers: {

@@ -10,7 +10,7 @@ function Profile() {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          "http://localhost:5000/api/auth/profile",
+          "https://ai-scam-shield-upkl.onrender.comd-upkl.onrender.com/api/auth/profile",
           {
             method: "GET",
             headers: {

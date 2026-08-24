@@ -67,7 +67,7 @@ function DeepfakeScanner() {
       );
 
       const response = await fetch(
-        "http://localhost:5000/api/scan/deepfake",
+        "https://ai-scam-shield-upkl.onrender.com/api/scan/deepfake",
         {
           method: "POST",
 

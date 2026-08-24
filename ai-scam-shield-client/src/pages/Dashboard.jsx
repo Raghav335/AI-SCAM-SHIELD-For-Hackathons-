@@ -25,7 +25,7 @@ function Dashboard() {
 
       try {
         const statsResponse = await fetch(
-          "http://localhost:5000/api/scan/dashboard",
+          "https://ai-scam-shield-upkl.onrender.com/api/scan/dashboard",
           {
             method: "GET",
             headers: {
@@ -45,7 +45,7 @@ function Dashboard() {
         setStats(statsData);
 
         const historyResponse = await fetch(
-          "http://localhost:5000/api/scan/history",
+          "https://ai-scam-shield-upkl.onrender.com/api/scan/history",
           {
             method: "GET",
             headers: {

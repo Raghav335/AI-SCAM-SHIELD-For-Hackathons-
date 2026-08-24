@@ -44,7 +44,7 @@ function ShieldProtection() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/scan/url",
+        "https://ai-scam-shield-upkl.onrender.comd-upkl.onrender.com/api/scan/url",
         {
           method: "POST",
           headers: {

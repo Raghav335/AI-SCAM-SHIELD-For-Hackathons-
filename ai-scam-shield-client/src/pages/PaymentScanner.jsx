@@ -58,7 +58,7 @@ function PaymentScanner() {
       formData.append("image", file);
 
       const response = await fetch(
-        "http://localhost:5000/api/scan/payment",
+        "https://ai-scam-shield-upkl.onrender.comd-upkl.onrender.com/api/scan/payment",
         {
           method: "POST",
           headers: {

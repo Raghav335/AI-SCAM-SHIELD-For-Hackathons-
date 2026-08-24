@@ -45,7 +45,7 @@ function AIChatbot() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/chatbot",
+        "https://ai-scam-shield-upkl.onrender.com/api/chatbot",
         {
           method: "POST",
           headers: {
