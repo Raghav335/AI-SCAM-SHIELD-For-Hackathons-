@@ -33,7 +33,7 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message);
+        alert(data.message || "Login failed");
         return;
       }
 
@@ -54,14 +54,12 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-[#f7f5ed] text-slate-800 flex items-center justify-center px-5 py-10">
-
       <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-6 items-stretch">
 
         {/* LEFT BRAND PANEL */}
         <div className="hidden lg:flex bg-[#214d3a] rounded-[2rem] p-10 text-white flex-col justify-between shadow-sm overflow-hidden relative">
 
           <div className="relative z-10">
-
             <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-3xl">
               🛡️
             </div>
@@ -78,7 +76,6 @@ function Login() {
               Scan suspicious links, images and QR codes before you trust
               them.
             </p>
-
           </div>
 
           {/* FEATURES */}
@@ -120,7 +117,6 @@ function Login() {
           <div className="absolute -right-24 -bottom-24 w-72 h-72 rounded-full border border-white/10" />
 
           <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full border border-white/10" />
-
         </div>
 
         {/* LOGIN CARD */}
@@ -264,9 +260,7 @@ function Login() {
           </div>
 
         </div>
-
       </div>
-
     </div>
   );
 }
