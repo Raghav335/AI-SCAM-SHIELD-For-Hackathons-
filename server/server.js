@@ -13,28 +13,69 @@ dotenv.config();
 
 const app = express();
 
+// ==========================================
+// CORS
+// ==========================================
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ai-scam-shield-tny3.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://ai-scam-shield-tny3.vercel.app",
-    ],
+    origin: (origin, callback) => {
+      // Allow requests without origin
+      // and all Vercel deployments
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+
 app.use(express.json());
 
+// ==========================================
+// ROUTES
+// ==========================================
+
 app.use("/api/auth", authRoutes);
+
 app.use("/api/scan", scanRoutes);
+
 app.use("/api/chatbot", chatbotRoutes);
+
 app.use("/api/reports", reportRoutes);
+
+// ==========================================
+// TEST ROUTE
+// ==========================================
 
 app.get("/", (req, res) => {
   res.send("AI Scam Shield Backend Running 🚀");
 });
 
+// ==========================================
+// DATABASE
+// ==========================================
+
 connectDB();
+
+// ==========================================
+// SERVER
+// ==========================================
 
 const PORT = process.env.PORT || 5000;
 
