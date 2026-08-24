@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://ai-scam-shield-tny3.vercel.app/"
+      "https://ai-scam-shield-tny3.vercel.app",
     ],
     credentials: true,
   })
@@ -28,15 +28,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/scan", scanRoutes);
 app.use("/api/chatbot", chatbotRoutes);
-app.use(
-  "/api/chatbot",
-  chatbotRoutes
-);
-
-app.use(
-  "/api/reports",
-  reportRoutes
-);
+app.use("/api/reports", reportRoutes);
 
 app.get("/", (req, res) => {
   res.send("AI Scam Shield Backend Running 🚀");
