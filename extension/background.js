@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/scan/url";
+const API_URL = "https://ai-scam-shield-upkl.onrender.com/api/scan/url";
 
 // Shield status
 let shieldActive = false;
