@@ -15,9 +15,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://ai-scam-shield-tny3.vercel.app",
-  "https://ai-scam-shield-e6ik.vercel.app",
-];
+  "https://ai-scam-shield-tny3.vercel.app"
 
 app.use(
   cors({
