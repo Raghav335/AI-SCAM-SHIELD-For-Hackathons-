@@ -3,31 +3,44 @@ import { useEffect, useState } from "react";
 function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
 
+        if (!token) {
+          setError("Please login first.");
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(
-          "https://ai-scam-shield-upkl.onrender.comd-upkl.onrender.com/api/auth/profile",
+          "https://ai-scam-shield-upkl.onrender.com/api/auth/profile",
           {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
         const data = await response.json();
 
+        console.log("Profile Response:", data);
+
         if (!response.ok) {
-          throw new Error(data.message || "Failed to load profile");
+          throw new Error(
+            data.message || "Failed to load profile"
+          );
         }
 
         setUser(data.user);
       } catch (error) {
         console.error("Profile Error:", error);
+        setError(error.message || "Unable to load profile");
       } finally {
         setLoading(false);
       }
@@ -36,19 +49,22 @@ function Profile() {
     fetchProfile();
   }, []);
 
+  // =========================
+  // LOADING UI
+  // =========================
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f7f5ed] flex items-center justify-center">
-        <div className="bg-white border border-slate-200 rounded-3xl shadow-sm px-8 py-7 text-center">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-green-50 flex items-center justify-center text-2xl animate-pulse">
+      <div className="min-h-screen bg-[#f7f5ed] flex items-center justify-center px-5">
+        <div className="bg-white border border-slate-200 rounded-3xl shadow-sm px-10 py-8 text-center">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-green-50 flex items-center justify-center text-3xl animate-pulse">
             🛡️
           </div>
 
-          <p className="text-[#214d3a] text-lg font-semibold mt-4">
+          <p className="text-[#214d3a] text-xl font-semibold mt-5">
             Loading profile...
           </p>
 
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-slate-400 text-sm mt-2">
             Please wait a moment
           </p>
         </div>
@@ -56,6 +72,39 @@ function Profile() {
     );
   }
 
+  // =========================
+  // ERROR UI
+  // =========================
+  if (error || !user) {
+    return (
+      <div className="min-h-screen bg-[#f7f5ed] flex items-center justify-center px-5">
+        <div className="bg-white border border-red-100 rounded-3xl shadow-sm p-8 text-center max-w-md w-full">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-red-50 flex items-center justify-center text-3xl">
+            ⚠️
+          </div>
+
+          <h3 className="text-xl font-bold text-slate-800 mt-5">
+            Unable to load profile
+          </h3>
+
+          <p className="text-slate-500 mt-2">
+            {error || "Profile information could not be loaded."}
+          </p>
+
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 px-6 py-3 bg-[#214d3a] hover:bg-[#183d2d] text-white rounded-xl font-semibold transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // =========================
+  // PROFILE PAGE
+  // =========================
   return (
     <div className="min-h-screen bg-[#f7f5ed] text-slate-800">
 
@@ -108,128 +157,125 @@ function Profile() {
 
         </div>
 
-        {user ? (
+        {/* PROFILE GRID */}
+        <div className="grid lg:grid-cols-[280px_1fr] gap-6">
 
-          <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+          {/* PROFILE CARD */}
+          <div className="bg-[#214d3a] rounded-3xl p-7 text-white shadow-sm">
 
-            {/* PROFILE CARD */}
-            <div className="bg-[#214d3a] rounded-3xl p-7 text-white shadow-sm">
+            <div className="w-24 h-24 mx-auto rounded-full bg-white/10 border-4 border-white/15 flex items-center justify-center text-4xl">
+              👤
+            </div>
 
-              <div className="w-24 h-24 mx-auto rounded-full bg-white/10 border-4 border-white/15 flex items-center justify-center text-4xl">
+            <h3 className="text-xl font-bold text-center mt-5 break-words">
+              {user.name}
+            </h3>
+
+            <p className="text-green-50/70 text-sm text-center mt-2 break-all">
+              {user.email}
+            </p>
+
+            <div className="mt-7 pt-6 border-t border-white/10">
+
+              <div className="flex items-center justify-center gap-2 text-sm text-green-50/80">
+                <span>🛡️</span>
+                <span>Protected Account</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* INFORMATION CARD */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
+
+            <div className="flex items-center gap-3 mb-7">
+
+              <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center text-xl">
                 👤
               </div>
 
-              <h3 className="text-xl font-bold text-center mt-5 break-words">
-                {user.name}
-              </h3>
+              <div>
+                <h3 className="text-xl font-bold">
+                  Personal Information
+                </h3>
 
-              <p className="text-green-50/70 text-sm text-center mt-2 break-all">
-                {user.email}
-              </p>
-
-              <div className="mt-7 pt-6 border-t border-white/10">
-
-                <div className="flex items-center justify-center gap-2 text-sm text-green-50/80">
-                  <span>🛡️</span>
-                  <span>Protected Account</span>
-                </div>
-
+                <p className="text-sm text-slate-500">
+                  Your registered account details
+                </p>
               </div>
 
             </div>
 
-            {/* INFORMATION CARD */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            {/* NAME */}
+            <div className="rounded-2xl bg-[#fbfaf5] border border-slate-100 p-5">
 
-              <div className="flex items-center gap-3 mb-7">
+              <div className="flex items-center gap-3">
 
-                <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center text-xl">
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
                   👤
                 </div>
 
-                <div>
-                  <h3 className="text-xl font-bold">
-                    Personal Information
-                  </h3>
+                <div className="min-w-0">
 
-                  <p className="text-sm text-slate-500">
-                    Your registered account details
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">
+                    Name
                   </p>
-                </div>
 
-              </div>
-
-              {/* NAME */}
-              <div className="rounded-2xl bg-[#fbfaf5] border border-slate-100 p-5">
-
-                <div className="flex items-center gap-3">
-
-                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
-                    👤
-                  </div>
-
-                  <div className="min-w-0">
-
-                    <p className="text-xs text-slate-400 uppercase tracking-wide">
-                      Name
-                    </p>
-
-                    <p className="text-lg font-semibold text-slate-800 mt-1 break-words">
-                      {user.name}
-                    </p>
-
-                  </div>
+                  <p className="text-lg font-semibold text-slate-800 mt-1 break-words">
+                    {user.name}
+                  </p>
 
                 </div>
 
               </div>
 
-              {/* EMAIL */}
-              <div className="rounded-2xl bg-[#fbfaf5] border border-slate-100 p-5 mt-4">
+            </div>
 
-                <div className="flex items-center gap-3">
+            {/* EMAIL */}
+            <div className="rounded-2xl bg-[#fbfaf5] border border-slate-100 p-5 mt-4">
 
-                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
-                    ✉️
-                  </div>
+              <div className="flex items-center gap-3">
 
-                  <div className="min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+                  ✉️
+                </div>
 
-                    <p className="text-xs text-slate-400 uppercase tracking-wide">
-                      Email Address
-                    </p>
+                <div className="min-w-0">
 
-                    <p className="text-lg font-semibold text-slate-800 mt-1 break-all">
-                      {user.email}
-                    </p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">
+                    Email Address
+                  </p>
 
-                  </div>
+                  <p className="text-lg font-semibold text-slate-800 mt-1 break-all">
+                    {user.email}
+                  </p>
 
                 </div>
 
               </div>
 
-              {/* SECURITY */}
-              <div className="mt-6 bg-[#edf3eb] border border-green-900/5 rounded-2xl p-5">
+            </div>
 
-                <div className="flex items-start gap-3">
+            {/* SECURITY */}
+            <div className="mt-6 bg-[#edf3eb] border border-green-900/5 rounded-2xl p-5">
 
-                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
-                    🛡️
-                  </div>
+              <div className="flex items-start gap-3">
 
-                  <div>
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
+                  🛡️
+                </div>
 
-                    <p className="font-bold text-slate-800">
-                      AI Scam Shield Protection
-                    </p>
+                <div>
 
-                    <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                      Your account gives you access to scam detection tools
-                      for suspicious URLs, images and QR codes.
-                    </p>
+                  <p className="font-bold text-slate-800">
+                    AI Scam Shield Protection
+                  </p>
 
-                  </div>
+                  <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+                    Your account gives you access to scam detection tools
+                    for suspicious URLs, images and QR codes.
+                  </p>
 
                 </div>
 
@@ -239,28 +285,10 @@ function Profile() {
 
           </div>
 
-        ) : (
-
-          /* ERROR */
-          <div className="bg-white border border-red-100 rounded-3xl shadow-sm p-8 text-center">
-
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-red-50 flex items-center justify-center text-3xl">
-              ⚠️
-            </div>
-
-            <h3 className="text-xl font-bold text-slate-800 mt-5">
-              Unable to load profile
-            </h3>
-
-            <p className="text-slate-500 mt-2">
-              Please try again later or login again.
-            </p>
-
-          </div>
-
-        )}
+        </div>
 
       </main>
+
     </div>
   );
 }

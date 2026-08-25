@@ -5,15 +5,21 @@ import { useAuth } from "../context/AuthContext";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setError("");
+
     if (!email || !password) {
-      alert("Please fill all fields");
+      setError("Please fill all fields.");
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -33,22 +39,21 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Login failed");
+        setError(data.message || "Invalid email or password.");
+        setLoading(false);
         return;
       }
 
-      // Save token through AuthContext
       login(data.token);
 
       console.log("Logged in user:", data.user);
 
-      alert("Login successful!");
-
-      // Go to Home page
       navigate("/");
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Unable to connect to server");
+
+      setError("Unable to connect to server. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -60,6 +65,7 @@ function Login() {
         <div className="hidden lg:flex bg-[#214d3a] rounded-[2rem] p-10 text-white flex-col justify-between shadow-sm overflow-hidden relative">
 
           <div className="relative z-10">
+
             <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-3xl">
               🛡️
             </div>
@@ -76,6 +82,7 @@ function Login() {
               Scan suspicious links, images and QR codes before you trust
               them.
             </p>
+
           </div>
 
           {/* FEATURES */}
@@ -117,6 +124,7 @@ function Login() {
           <div className="absolute -right-24 -bottom-24 w-72 h-72 rounded-full border border-white/10" />
 
           <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full border border-white/10" />
+
         </div>
 
         {/* LOGIN CARD */}
@@ -130,6 +138,7 @@ function Login() {
             </div>
 
             <div>
+
               <h1 className="font-bold text-lg">
                 AI Scam Shield
               </h1>
@@ -137,6 +146,7 @@ function Login() {
               <p className="text-xs text-slate-500">
                 Don't trust it. Scan it.
               </p>
+
             </div>
 
           </div>
@@ -158,6 +168,29 @@ function Login() {
 
           </div>
 
+          {/* ERROR MESSAGE */}
+          {error && (
+            <div className="mb-5 rounded-2xl border border-red-100 bg-red-50 p-4 flex items-start gap-3">
+
+              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0">
+                ⚠️
+              </div>
+
+              <div>
+
+                <p className="font-semibold text-red-700">
+                  Login Failed
+                </p>
+
+                <p className="text-sm text-red-600 mt-1">
+                  {error}
+                </p>
+
+              </div>
+
+            </div>
+          )}
+
           {/* EMAIL */}
           <div>
 
@@ -175,8 +208,9 @@ function Login() {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
+                disabled={loading}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-transparent py-3.5 outline-none text-slate-800 placeholder:text-slate-400"
+                className="w-full bg-transparent py-3.5 outline-none text-slate-800 placeholder:text-slate-400 disabled:opacity-60"
               />
 
             </div>
@@ -200,8 +234,14 @@ function Login() {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
+                disabled={loading}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-transparent py-3.5 outline-none text-slate-800 placeholder:text-slate-400"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !loading) {
+                    handleLogin();
+                  }
+                }}
+                className="w-full bg-transparent py-3.5 outline-none text-slate-800 placeholder:text-slate-400 disabled:opacity-60"
               />
 
             </div>
@@ -211,10 +251,34 @@ function Login() {
           {/* LOGIN BUTTON */}
           <button
             onClick={handleLogin}
-            className="w-full mt-7 bg-[#214d3a] hover:bg-[#183d2d] text-white py-4 rounded-2xl font-semibold shadow-sm transition flex items-center justify-center gap-2"
+            disabled={loading}
+            className={`w-full mt-7 text-white py-4 rounded-2xl font-semibold shadow-sm transition flex items-center justify-center gap-3 ${
+              loading
+                ? "bg-[#183d2d] cursor-not-allowed"
+                : "bg-[#214d3a] hover:bg-[#183d2d]"
+            }`}
           >
-            Login
-            <span>→</span>
+
+            {loading ? (
+              <>
+                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+
+                <span>
+                  Signing in...
+                </span>
+              </>
+            ) : (
+              <>
+                <span>
+                  Login
+                </span>
+
+                <span>
+                  →
+                </span>
+              </>
+            )}
+
           </button>
 
           {/* SIGNUP OPTION */}
@@ -229,6 +293,7 @@ function Login() {
               >
                 Sign Up
               </Link>
+
             </p>
 
           </div>
@@ -260,6 +325,7 @@ function Login() {
           </div>
 
         </div>
+
       </div>
     </div>
   );
