@@ -15,7 +15,6 @@ AI Scam Shield is an AI-powered scam detection and prevention web application de
 * 📧 **Email Scanner** — Analyze suspicious email content.
 * 💬 **WhatsApp Scanner** — Analyze suspicious WhatsApp messages.
 * 💳 **Payment Scanner** — Analyze payment screenshots.
-* 🧠 **Deepfake / AI Image Assessment** — Detect possible AI-generated or manipulated image indicators.
 * 📊 **Risk Score** — Displays a score from 0–100.
 * 🚨 **Risk Level** — Safe, Suspicious, or Dangerous.
 * 🔍 **Security Engine Results** — Shows malicious, suspicious, and harmless results when available.
