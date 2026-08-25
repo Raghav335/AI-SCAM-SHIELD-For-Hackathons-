@@ -17,32 +17,17 @@ const app = express();
 // CORS
 // ==========================================
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://ai-scam-shield-tny3.vercel.app",
-];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests without origin
-      // and all Vercel deployments
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app")
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: true,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 // ==========================================
-// MIDDLEWARE
+// BODY PARSER
 // ==========================================
 
 app.use(express.json());
@@ -64,7 +49,7 @@ app.use("/api/reports", reportRoutes);
 // ==========================================
 
 app.get("/", (req, res) => {
-  res.send("AI Scam Shield Backend Running 🚀");
+  res.status(200).send("AI Scam Shield Backend Running 🚀");
 });
 
 // ==========================================
