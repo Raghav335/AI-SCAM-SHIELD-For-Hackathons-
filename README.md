@@ -65,8 +65,7 @@ AI Scam Shield is an AI-powered scam detection and prevention web application de
 
 Open the original repository:
 
-https://github.com/naimishgupta86/AI-SCAM-SHIELD
-
+https://github.com/Raghav335/AI-SCAM-SHIELD-For-Hackathons-
 Click:
 
 **Fork → Create Fork**
@@ -581,7 +580,7 @@ The `.env` file is intentionally not included in the repository for security rea
 
 ---
 
-# 👨‍💻 Project
+# 👨‍💻 Project live : https://ai-scam-shield-e6ik.vercel.app/
 
 ## AI Scam Shield
 
